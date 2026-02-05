@@ -1,0 +1,97 @@
+.page {
+  min-height: 100vh;
+  background: linear-gradient(-45deg, #020617, #1e293b, #0f766e, #020617);
+  background-size: 400% 400%;
+  animation: gradientMove 12s ease infinite;
+  color: #e5e7eb;
+  padding: 30px;
+  font-family: Arial, sans-serif;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.primaryBtn {
+  background: #22c55e;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+  background: #111827;
+}
+
+.table th,
+.table td {
+  padding: 14px;
+  text-align: center;
+  border-bottom: 1px solid #1f2937;
+}
+
+.table th {
+  background: #020617;
+}
+
+.role.admin { color: #ef4444; font-weight: bold; }
+.role.contributor { color: #3b82f6; font-weight: bold; }
+.role.viewer { color: #22c55e; font-weight: bold; }
+
+.editBtn {
+  background: #374151;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal {
+  background: #020617;
+  padding: 32px;
+  width: 760px;
+  border-radius: 14px;
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.input {
+  padding: 14px 16px;
+  font-size: 16px;
+  border-radius: 10px;
+  border: 1px solid #374151;
+  background: #020617;
+  color: #e5e7eb;
+}
+
+.addressBox {
+  margin-top: 16px;
+  min-height: 80px;
+}
+
+.footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+}
