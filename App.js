@@ -20,6 +20,8 @@ export default function App() {
   const [users, setUsers] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState(EMPTY_USER);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [companyFilter, setCompanyFilter] = useState("All");
 
   useEffect(() => {
     setUsers([
@@ -38,16 +40,6 @@ export default function App() {
     ]);
   }, []);
 
-  const openAdd = () => {
-    setCurrentUser(EMPTY_USER);
-    setModalOpen(true);
-  };
-
-  const openEdit = (user) => {
-    setCurrentUser(user);
-    setModalOpen(true);
-  };
-
   const saveUser = () => {
     if (!currentUser.firstName || !currentUser.email) return;
 
@@ -59,13 +51,49 @@ export default function App() {
     setModalOpen(false);
   };
 
+  const filteredUsers = users.filter(u => {
+    const text = Object.values(u).join(" ").toLowerCase();
+    return (
+      text.includes(searchTerm.toLowerCase()) &&
+      (companyFilter === "All" || u.company === companyFilter)
+    );
+  });
+
   return (
     <div className="page">
       <header className="header">
         <h2>User Management</h2>
-        <button className="primaryBtn" onClick={openAdd}> Add User</button>
+
+        <div className="headerActions">
+          <input
+            className="searchInput"
+            placeholder="Search users..."
+            value={searchTerm}
+            onChange={e => setSearchTerm(e.target.value)}
+          />
+
+          <select
+            className="filterSelect"
+            value={companyFilter}
+            onChange={e => setCompanyFilter(e.target.value)}
+          >
+            <option value="All">All Companies</option>
+            {COMPANIES.map(c => <option key={c}>{c}</option>)}
+          </select>
+
+          <button
+            className="primaryBtn"
+            onClick={() => {
+              setCurrentUser(EMPTY_USER);
+              setModalOpen(true);
+            }}
+          >
+            Add User
+          </button>
+        </div>
       </header>
 
+      {/* TABLE */}
       <table className="table">
         <thead>
           <tr>
@@ -76,12 +104,11 @@ export default function App() {
             <th>DOB</th>
             <th>Company</th>
             <th>Role</th>
-            <th>Address</th>
             <th>Action</th>
           </tr>
         </thead>
         <tbody>
-          {users.map(u => (
+          {filteredUsers.map(u => (
             <tr key={u.id}>
               <td>{u.firstName} {u.lastName}</td>
               <td>{u.email}</td>
@@ -90,42 +117,65 @@ export default function App() {
               <td>{u.dob}</td>
               <td>{u.company}</td>
               <td className={`role ${u.role.toLowerCase()}`}>{u.role}</td>
-              <td>{u.address}</td>
               <td>
-                <button className="editBtn" onClick={() => openEdit(u)}>Edit</button>
+                <button
+                  className="editBtn"
+                  onClick={() => {
+                    setCurrentUser(u);
+                    setModalOpen(true);
+                  }}
+                >
+                  Edit
+                </button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
 
+      {/* MODAL */}
       {modalOpen && (
         <div className="overlay">
           <div className="modal">
             <h3>{currentUser.id ? "Edit User" : "Add User"}</h3>
 
             <div className="formGrid">
-              <input className="input" placeholder="First Name"
+              <input
+                className="input"
+                placeholder="First Name"
                 value={currentUser.firstName}
                 onChange={e => setCurrentUser({ ...currentUser, firstName: e.target.value })}
               />
-              <input className="input" placeholder="Last Name"
+              <input
+                className="input"
+                placeholder="Last Name"
                 value={currentUser.lastName}
                 onChange={e => setCurrentUser({ ...currentUser, lastName: e.target.value })}
               />
-              <input className="input" placeholder="Email"
+              <input
+                className="input"
+                placeholder="Email"
                 value={currentUser.email}
                 onChange={e => setCurrentUser({ ...currentUser, email: e.target.value })}
               />
-              <input className="input" placeholder="Mobile"
+              <input
+                className="input"
+                placeholder="Mobile"
                 value={currentUser.mobile}
                 onChange={e => setCurrentUser({ ...currentUser, mobile: e.target.value })}
               />
-              <input type="date" className="input"
+
+              {/* DOB */}
+              <input
+                type="date"
+                className="input"
                 value={currentUser.dob}
                 onChange={e => setCurrentUser({ ...currentUser, dob: e.target.value })}
               />
-              <select className="input"
+
+              {/* Gender */}
+              <select
+                className="input"
                 value={currentUser.gender}
                 onChange={e => setCurrentUser({ ...currentUser, gender: e.target.value })}
               >
@@ -133,14 +183,18 @@ export default function App() {
                 <option>Female</option>
                 <option>Other</option>
               </select>
-              <select className="input"
+
+              <select
+                className="input"
                 value={currentUser.company}
                 onChange={e => setCurrentUser({ ...currentUser, company: e.target.value })}
               >
                 <option value="">Select Company</option>
                 {COMPANIES.map(c => <option key={c}>{c}</option>)}
               </select>
-              <select className="input"
+
+              <select
+                className="input"
                 value={currentUser.role}
                 onChange={e => setCurrentUser({ ...currentUser, role: e.target.value })}
               >
